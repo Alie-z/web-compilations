@@ -1,0 +1,37 @@
+{
+  "name": "react-ivity",
+  "version": "1.0.0",
+  "description": "Use Vue3 Composition Api in React, just import @vue/reactivity",
+  "main": "lib/index.js",
+  "module": "./dist/index.esm.js",
+  "authors": {
+    "name": "Alie-z",
+    "email": "17512018620@163.com"
+  },
+  "scripts": {
+    "dev": "father doc dev",
+    "build:lib": "father build",
+    "build:doc": "father doc build",
+    "deploy": "father doc deploy",
+    "build": "npm run build:lib & npm run build:doc"
+  },
+  "peerDependencies": {
+    "react": "^16.12.0"
+  },
+  "devDependencies": {
+    "father": "^2.29.5"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@vue/reactivity": "^3.0.0-rc.4"
+  },
+  "keywords": [
+    "React Composition api",
+    "Vue Composition api",
+    "React Reactivity",
+    "Vue Reactivity",
+    "React Vue",
+    "Reactivity",
+    "@vue/reactivity"
+  ]
+}

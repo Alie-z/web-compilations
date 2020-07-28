@@ -1,0 +1,16 @@
+node_modules
+.vscode
+.idea
+public
+.DS_Store
+coverage
+.docz
+example
+docs
+.travis.yml
+jest.config.js
+tsconfig.json
+src
+test
+.babelrc
+.fatherrc.js
