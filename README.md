@@ -1,12 +1,3 @@
----
-name: 快速上手
-route: /
-order: 1
-sidebar: false
----
-
-import Counter from './index'
-
 ## 简介
 
 仅仅需要一个 `store` 文件，你就可以开始编写你的数据仓库。
@@ -22,10 +13,6 @@ yarn add react-reactivity @vue/reactivity -S
 npm install react-reactivity @vue/reactivity -S
 
 ```
-
-
-## 使用示例
-<Counter />
 
 
 ## Store
@@ -182,3 +169,5 @@ export default () => {
 5. 通过useContext读取用户从Provider中传入的store
 6. 再通过Vue的effect去帮我们执行selector(store)，并且指定scheduler为forceUpdate，这样就完成了依赖收集
 7. 响应式数据更新后，触发effect调用forceUpdate，完成页面渲染
+
+
