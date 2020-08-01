@@ -1,8 +1,8 @@
 const options = {
   doc: {
     // themeConfig: { mode: 'dark' },
-    title: 'react-ivity',
-    base: process.env.NODE_ENV === 'production' ? '/react-ivity/' : '',
+    title: 'react-reactivity',
+    base: process.env.NODE_ENV === 'production' ? '/react-reactivity/' : '',
     dest: 'docs',
     typescript: true
   },

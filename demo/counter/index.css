@@ -1,0 +1,11 @@
+.flex {
+  display: flex;
+}
+
+.card {
+  margin-bottom: 36px;
+}
+
+.text-chunk {
+  margin-bottom: 12px;
+}

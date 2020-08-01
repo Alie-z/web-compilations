@@ -1,5 +1,5 @@
 {
-  "name": "react-ivity",
+  "name": "react-reactivity",
   "version": "1.0.0",
   "description": "Use Vue3 Composition Api in React, just import @vue/reactivity",
   "main": "lib/index.js",
@@ -13,13 +13,15 @@
     "build:lib": "father build",
     "build:doc": "father doc build",
     "deploy": "father doc deploy",
+    "sync": "node tool/sync-codes.js",
     "build": "npm run build:lib & npm run build:doc"
   },
   "peerDependencies": {
     "react": "^16.12.0"
   },
   "devDependencies": {
-    "father": "^2.29.5"
+    "father": "^2.29.5",
+    "glob": "^7.1.6"
   },
   "license": "MIT",
   "dependencies": {

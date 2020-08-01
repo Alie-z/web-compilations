@@ -1,0 +1,74 @@
+---
+name: 快速上手
+route: /
+order: 1
+sidebar: false
+---
+
+import Counter from './index'
+
+## 简介
+
+仅仅需要一个 `store` 文件，你就可以开始编写你的数据仓库。
+
+本库只提供 `Provider` 和 `useStore` 两个 api，配合 `@vue/reactivity` 仓库里的响应式能力，即可完成一切状态管理。
+
+
+
+## 示例
+<Counter />
+
+
+## Store
+```ts
+// store.js
+import { reactive } from '@vue/reactivity';
+
+export const state = reactive({
+  count: 0,
+});
+
+export const add = () => (state.count += 1);
+
+export const store = reactive(state)
+
+export type Store = typeof store;
+```
+
+## Codes
+```tsx
+import React from 'react';
+import { Card, Button } from 'antd';
+import { Provider, useStore } from '../../src/store';
+import { store, add, Store } from './store';
+import './index.css';
+import 'antd/dist/antd.css';
+
+function Count() {
+  const countState = useStore((store: Store) => ({
+    count: store.count,
+  }));
+
+  return (
+    <Card hoverable style={{ marginBottom: 24 }}>
+      <h1>计数器</h1>
+      <div className="chunk">
+        <div className="text-chunk">store中的count现在是 {countState.count}</div>
+        <Button onClick={add}>add</Button>
+      </div>
+    </Card>
+  );
+}
+
+export default () => {
+  return (
+    <Provider value={store}>
+      <div className="flex">
+        <Count />
+      </div>
+    </Provider>
+  );
+};
+
+```
+
