@@ -52,19 +52,34 @@ function Chat() {
   );
 }
 
+// function ViewArea() {
+//   const msgList = useStore(store => store.state.msgList)
+//
+//   return (
+//     <Card hoverable style={{marginBottom: 24}}>
+//       <h1>消息列表</h1>
+//       {msgList.map((msg, i) => <div onClick={() => mutations.delMsg1(i)} key={i}>{msg}</div>)}
+//     </Card>
+//   )
+// }
+
 function ViewArea() {
-  const msgList = useStore(store => store.state.msgList)
-  const _handleDelMsg = index => {
-    console.log('index', index)
-    mutations.delMsg(index)
-  }
+  const msgList = useStore((store) => {
+    return store.state.msgList.map((msg, i) => (
+      <div onClick={() => mutations.delMsg2(i)} key={i}>
+        {msg}
+      </div>
+    ));
+  });
+
   return (
     <Card hoverable style={{marginBottom: 24}}>
       <h1>消息列表</h1>
-      {msgList.map((msg, i) => <div onClick={() => _handleDelMsg(i)} key={i}>{msg}</div>)}
+      {msgList}
     </Card>
   )
 }
+
 
 export default () => {
   return (
