@@ -13,7 +13,10 @@ const add = () => state.count += 1
 const setMsg = message => (state.message = message)
 const sendMsg = msg => (state.msgList = [...state.msgList, msg])
 const delMsg = index => {
-  console.log('msgList index', index)
+  // TODO 改变数组目前需要深复制 操作完再赋值 待优化
+  const newMsg = JSON.parse(JSON.stringify(state.msgList))
+  newMsg.splice(index, 1)
+  state.msgList = newMsg
 }
 
 effect(() => {
