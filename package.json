@@ -1,6 +1,6 @@
 {
   "name": "react-reactivity",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Use Vue3 Composition Api in React, just import @vue/reactivity",
   "main": "lib/index.js",
   "module": "./dist/index.esm.js",
@@ -26,6 +26,14 @@
   "license": "MIT",
   "dependencies": {
     "@vue/reactivity": "^3.0.0-rc.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Alie-z/react-reactivity"
+  },
+  "bugs": {
+    "url": "https://github.com/Alie-z/react-reactivity/issues",
+    "email": "17512018620@163.com"
   },
   "keywords": [
     "React Composition api",
