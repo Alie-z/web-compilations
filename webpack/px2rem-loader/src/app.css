@@ -1,0 +1,20 @@
+.app {
+  width: 750px;
+  background-color: pink;
+  box-sizing: border-box;
+  font-size: 32px; /*  注释 */
+  padding: 0 16px; /*  no */
+}
+.p {
+  font-size: 32px;
+  margin: 0;
+  line-height: 32px;
+  background-color: royalblue;
+}
+
+.text1 {
+  display: block;
+  font-size: 26px;
+  line-height: 26px;
+  color: rebeccapurple;
+}
