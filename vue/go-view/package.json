@@ -22,7 +22,7 @@
         "@types/keymaster": "^1.6.30",
         "@types/lodash": "^4.14.184",
         "animate.css": "^4.1.1",
-        "axios": "^1.4.0",
+        "axios": "^1.7.4",
         "color": "^4.2.3",
         "crypto-js": "^4.1.1",
         "dayjs": "^1.11.7",
