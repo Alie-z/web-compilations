@@ -1,0 +1,6 @@
+@import "defines";
+//在这里写覆盖饿了么的全局样式
+
+.primay-color {
+    color: $--color-primary;
+}
