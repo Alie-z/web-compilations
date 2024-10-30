@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>取消流操作示例</title>
+    </head>
+    <body>
+        <button id="cancelButton">取消写操作</button>
+
+        <script>
+            async function example() {
+                const abortController = new AbortController();
+
+                const stream = new WritableStream({
+                    write(chunk, controller) {
+                        console.log('正在写入:', chunk);
+
+                        // 监听中止信号
+                        controller.signal.addEventListener('abort', () => {
+                            console.log('写操作被取消');
+                            // 处理流中止逻辑，例如清理资源或通知用户
+                        });
+                    },
+                    close() {
+                        console.log('写入完成');
+                    },
+                    abort(reason) {
+                        console.warn('写入中止:', reason);
+                    }
+                });
+
+                const writer = stream.getWriter();
+
+                // 模拟写入操作
+                writer.write('数据块 1');
+                setTimeout(function () {
+                    writer.write('数据块 2');
+                }, 3000);
+
+                // 保存 abortController 以便取消操作
+                window.currentAbortController = abortController;
+                // writer.releaseLock(); // 创建新写操作前释放写锁
+
+                // 监听取消按钮的点击事件
+                document.getElementById('cancelButton').addEventListener('click', async () => {
+                    if (window.currentAbortController) {
+                        await writer.abort();
+                        window.currentAbortController.abort();
+                        console.log('点击了取消写操作按钮');
+                    } else {
+                        console.log('没有正在进行的写操作');
+                    }
+                });
+            }
+
+            example();
+        </script>
+    </body>
+</html>
