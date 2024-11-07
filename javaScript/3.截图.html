@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>点击按钮弹窗</title>
+        <!-- style样式 -->
+        <style>
+            * {
+                padding: 0;
+                margin: 0;
+                font-size: 14px;
+            }
+
+            /* 弹窗遮罩背景样式 */
+
+            .black_overlay {
+                display: none;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: black;
+                z-index: 1001;
+                -moz-opacity: 0.8;
+                opacity: 0.8;
+                filter: alpha(opacity=88);
+            }
+
+            /* 打开弹窗按钮样式 */
+
+            .openBtn {
+                display: inline-block;
+                cursor: pointer;
+                background: #38f;
+                color: #fff;
+                width: 100px;
+                height: 30px;
+                line-height: 30px;
+                border: 0px;
+                border-radius: 4px;
+            }
+
+            /* 弹窗样式 */
+
+            .white_content {
+                display: none;
+                position: absolute;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                margin: auto;
+                width: 1000px;
+                height: 420px;
+                border: 1px solid orange;
+                background-color: white;
+                z-index: 1002;
+            }
+
+            /* 关闭弹窗按钮样式 */
+
+            .closeBtn {
+                width: 25px;
+                height: 25px;
+                line-height: 5px;
+                text-align: center;
+                /* 采用绝对定位，定位到弹窗右上角 */
+                position: absolute;
+                right: -8px;
+                top: -8px;
+                border: 1px solid rgb(78, 78, 78);
+                border-radius: 50%;
+                z-index: 1005;
+            }
+
+            /* 最外围的大容器 */
+
+            #bigBox {
+                /* width: 100%;
+            height: 100%; */
+                /* 转成弹性盒子 */
+                display: flex;
+                position: relative;
+                background-color: #fff;
+            }
+
+            /* 左边容器 */
+
+            #bigBox-left {
+                width: 50%;
+                height: 100%;
+                /*暂定*/
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            /* 右边容器 */
+
+            #bigBox-right {
+                width: 50%;
+                height: 100%;
+                /*暂定*/
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                /* background-color: #0f5; */
+            }
+
+            /* 导入图片 - box */
+
+            #box,
+            #box1 {
+                width: 400px;
+                height: 400px;
+                border: 1px solid red;
+                margin: 25px auto 10px;
+                position: relative;
+            }
+
+            /* 操作按钮-box */
+
+            #operate {
+                text-align: center;
+                display: flex;
+                justify-content: center;
+            }
+
+            /* 操作按钮-间距 */
+
+            #operate .operate-box {
+                margin: 10px 5px;
+            }
+
+            input[type='file'] {
+                display: none;
+            }
+
+            label,
+            .winBtn {
+                display: inline-block;
+                cursor: pointer;
+                background: #38f;
+                color: #fff;
+                width: 102px;
+                height: 38px;
+                line-height: 38px;
+                border-radius: 4px;
+            }
+
+            .winBtn {
+                border: 0px;
+                background: rgb(116, 115, 115);
+            }
+
+            /* 画布 */
+            #clipcanvas {
+                display: none;
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- 弹窗按钮 -->
+        <button onclick="openThisWindow()" class="openBtn">打开弹窗</button>
+        <!-- 弹窗内容 -->
+        <div id="light" class="white_content">
+            <!-- 最外围的大容器 -->
+            <div id="bigBox">
+                <!-- 左边容器 -->
+                <div id="bigBox-left">
+                    <div id="box">
+                        <canvas id="canvas" width="400" height="400"></canvas>
+                        <!-- 画布 -->
+                        <canvas id="clipcanvas" width="400" height="400"></canvas>
+                    </div>
+                    <div id="operate">
+                        <p class="operate-box">
+                            <label><input type="file" name="" id="bg" value="" />选择图片</label>
+                        </p>
+                        <!-- 直接生成截图-按钮 -->
+                        <p class="operate-box allowBtn">
+                            <button id="create" onclick="create()" disabled class="winBtn">直接生成</button>
+                        </p>
+                        <!-- 重新截图-按钮 -->
+                        <p class="operate-box allowBtn">
+                            <button id="reset" onclick="reset()" disabled class="winBtn">重新截图</button>
+                        </p>
+                    </div>
+                </div>
+                <!-- 右边容器 -->
+                <div id="bigBox-right">
+                    <div id="box1">
+                        <!-- 生成截图 -->
+                        <a href="" download="logo.png" title="点击下载" id="down">
+                            <img src="" id="result" />
+                        </a>
+                    </div>
+                    <!-- 确认按钮位置 -->
+                    <div id="operate">
+                        <!-- 确认截图-按钮 -->
+                        <p class="operate-box allowBtn">
+                            <button id="confirm" onclick="confirm()" disabled class="winBtn">确认截图</button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <!-- 关闭弹窗按钮 -->
+            <button onclick="closeThisWindow()" class="closeBtn">X</button>
+        </div>
+        <!-- 弹窗遮罩层 -->
+        <div id="fade" class="black_overlay"></div>
+    </body>
+    <script type="text/javascript">
+        // 点击打开弹窗
+        function openThisWindow() {
+            document.getElementById('light').style.display = 'block';
+            document.getElementById('fade').style.display = 'block';
+        }
+        // 弹窗内-操作
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const baseW = 400;
+        const flagW = 10;
+        let bgConfig;
+        let flagConfig;
+        document.getElementsByClassName('.allowBtn').disabled = true;
+        // 选择文件
+        document.getElementById('bg').onchange = async function () {
+            const file = this.files[0];
+            try {
+                document.getElementById('clipcanvas').style.display = 'block';
+                clipcanvas.width = canvas.clientWidth;
+                clipcanvas.height = canvas.clientHeight;
+                const img = await getImageObj(file);
+                const rate = compress(img, baseW);
+                bgConfig = [img, 0, 0, img.width, img.height, 0, 0, rate.w, rate.h];
+                drawn();
+            } catch (error) {
+                console.error(e);
+            }
+        };
+
+        function drawn() {
+            ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+            if (bgConfig) {
+                ctx.drawImage(...bgConfig);
+            }
+            if (flagConfig) {
+                ctx.drawImage(...flagConfig);
+            }
+            console.log(111);
+        }
+
+        //图片压缩,获取等比缩放后的结果
+        function compress(img, base) {
+            let w = img.width;
+            let h = img.height;
+            if (img.width > img.height) {
+                // 新的 宽比 高 = 旧的宽比高  h / w = img.height /img.width  ;
+                if (img.width > base) {
+                    //要将宽度缩放
+                    w = base;
+                    h = (w / img.width) * img.height;
+                }
+            } else {
+                //要将高度缩放
+                if (img.height > base) {
+                    h = base;
+                    w = (h / img.height) * img.width;
+                }
+            }
+            return {
+                w,
+                h
+            };
+        }
+
+        function getImageObj(file) {
+            const url = getObjectURL(file);
+            const img = new Image();
+            img.src = url;
+            return new Promise((resolve, reject) => {
+                img.onload = function () {
+                    resolve(img);
+                };
+                img.onerror = function (e) {
+                    reject(e);
+                };
+            });
+        }
+
+        //取得该文件的url
+        function getObjectURL(file) {
+            var url = null;
+            if (window.createObjectURL != undefined) {
+                url = window.createObjectURL(file);
+            } else if (window.URL != undefined) {
+                url = window.URL.createObjectURL(file);
+            } else if (window.webkitURL != undefined) {
+                url = window.webkitURL.createObjectURL(file);
+            }
+            // 选择图片文件之后,直接截图和重新截图按钮可以操作
+            (document.getElementById('create').disabled = false),
+                (document.getElementById('create').style.background = '#38f'),
+                (document.getElementById('reset').disabled = false),
+                (document.getElementById('reset').style.background = '#38f'),
+                console.log(url);
+            return url;
+        }
+
+        //截图
+        var clipcanvas = document.getElementById('clipcanvas');
+        var clipctx = clipcanvas.getContext('2d');
+        var start = null;
+        var clipArea = {}; //裁剪范围
+        clipcanvas.onmousedown = function (e) {
+            start = {
+                x: e.offsetX,
+                y: e.offsetY
+            };
+        };
+        clipcanvas.onmousemove = function (e) {
+            if (start) {
+                fill(start.x, start.y, e.offsetX - start.x, e.offsetY - start.y);
+            }
+        };
+        document.addEventListener('mouseup', function () {
+            if (start) {
+                start = null;
+                exportImg(clipArea);
+            }
+        });
+
+        function fill(x, y, w, h) {
+            clipctx.clearRect(0, 0, clipcanvas.width, clipcanvas.height);
+            clipctx.beginPath();
+            clipctx.fillStyle = 'rgba(0,0,0,0.6)';
+            clipctx.strokeStyle = 'green';
+            //遮罩层
+            clipctx.globalCompositeOperation = 'source-over';
+            clipctx.fillRect(0, 0, clipcanvas.width, clipcanvas.height);
+            //画框
+            clipctx.globalCompositeOperation = 'destination-out';
+            clipctx.fillRect(x, y, w, h);
+            //描边
+            clipctx.globalCompositeOperation = 'source-over';
+            clipctx.moveTo(x, y);
+            clipctx.lineTo(x + w, y);
+            clipctx.lineTo(x + w, y + h);
+            clipctx.lineTo(x, y + h);
+            clipctx.lineTo(x, y);
+            clipctx.stroke();
+            clipctx.closePath();
+            clipArea = {
+                x,
+                y,
+                w,
+                h
+            };
+        }
+
+        function startClip(area) {
+            var canvas = document.createElement('canvas');
+            // 修改默认值:300 x 150
+            canvas.width = 400;
+            canvas.height = 400;
+            var data = ctx.getImageData(area.x, area.y, area.w, area.h);
+            var context = canvas.getContext('2d');
+            context.putImageData(data, 0, 0);
+            return canvas.toDataURL('image/png');
+        }
+
+        function exportImg(clipArea) {
+            var url = startClip(clipArea);
+            // 框选截图区域之后,确定截图按钮可以进行操作
+            (document.getElementById('confirm').disabled = false),
+                (document.getElementById('confirm').style.background = '#38f'),
+                (document.getElementById('result').src = url);
+            document.getElementById('down').href = url;
+        }
+
+        //直接生成
+        function create() {
+            exportImg({
+                x: 0,
+                y: 0,
+                w: canvas.clientWidth,
+                h: canvas.clientHeight
+            });
+            console.log('直接生成,OK');
+        }
+
+        //重新截图
+        function reset() {
+            clipctx.clearRect(0, 0, clipcanvas.width, clipcanvas.height);
+            document.getElementById('confirm').style.background = 'rgb(116, 115, 115)';
+            document.getElementById('confirm').disabled = true;
+            document.getElementById('result').src = null;
+            document.getElementById('down').href = null;
+        }
+
+        // 确认截图
+        function confirm() {
+            // 获取到的截图url:
+            let resultImg = document.getElementById('down').href;
+            console.log(resultImg);
+            console.log('确认按钮,执行成功');
+            closeThisWindow();
+        }
+
+        // 点击关闭弹窗
+        function closeThisWindow() {
+            document.getElementById('light').style.display = 'none';
+            document.getElementById('fade').style.display = 'none';
+        }
+    </script>
+</html>
