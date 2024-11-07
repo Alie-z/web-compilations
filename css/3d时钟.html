@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>3D冰块数字时钟</title>
+        <style>
+            :root {
+                --active-clr: red;
+                --passive-clr: rgba(255, 255, 255, 0.1);
+            }
+            html {
+                min-height: 100vh;
+                display: grid;
+                place-items: center;
+                background: linear-gradient(to top, #222 50%, #555 50%);
+                perspective: 200px;
+            }
+            body {
+                margin: 0;
+                width: 100%;
+                max-width: 608px;
+                aspect-ratio: 1 / 1;
+                text-align: center;
+                perspective: 200px;
+                position: relative;
+            }
+            .colorBox {
+                width: 100%;
+                position: absolute;
+                bottom: calc((1vw + 30px) * -1);
+                left: 50%;
+                transform: translate(-50%, 75%);
+            }
+            .cube {
+                position: absolute;
+                padding: 1rem;
+                box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.25);
+                background: rgba(255, 255, 255, 0.25);
+                backdrop-filter: blur(4px);
+            }
+            .cube.left {
+                transform: translateY(75%) skewY(25deg);
+                border-radius: 0 0 0 5px;
+            }
+            .cube.right {
+                transform: translate(100%, 75%) skewY(-25deg);
+                border-radius: 0 0 5px 0;
+            }
+            .cube.top {
+                transform: translate(50%, 1.75%) rotateZ(-65deg) skewY(40deg) scaleX(0.85) scaleY(1.1);
+                border-radius: 0 5px 0 0;
+            }
+            .digit {
+                width: 5vw;
+                height: 12vw;
+                position: relative;
+                display: inline-block;
+                margin: 1vw;
+            }
+            .segment {
+                width: 5vw;
+                height: 2vw;
+                background: var(--passive-clr);
+                position: absolute;
+                transition: 0.5s;
+            }
+            .segment:nth-child(1) {
+                top: 0;
+                left: 0;
+                clip-path: polygon(0% 15%, 10% 0%, 90% 0%, 100% 15%, calc(100% - 2vw) 100%, calc(0% + 2vw) 100%);
+            }
+            .segment:nth-child(2) {
+                left: 1.5vw;
+                top: -1.25vw;
+                transform-origin: 0% 100%;
+                transform: rotate(90deg) scaleY(-1);
+                clip-path: polygon(0% 15%, 10% 0%, 90% 0%, 100% 15%, calc(100% - 1.5vw) 100%, calc(0% + 1.5vw) 100%);
+            }
+            .segment:nth-child(3) {
+                left: -1.5vw;
+                top: -1.25vw;
+                transform-origin: 100% 100%;
+                transform: rotate(-90deg) scaleY(-1);
+                clip-path: polygon(0% 15%, 10% 0%, 90% 0%, 100% 15%, calc(100% - 1.5vw) 100%, calc(0% + 1.5vw) 100%);
+            }
+            .segment:nth-child(4) {
+                top: 4.85vw;
+                left: 0;
+                clip-path: polygon(
+                    10% 50%,
+                    calc(0% + 1.75vw) 0%,
+                    calc(100% - 1.75vw) 0%,
+                    90% 50%,
+                    calc(100% - 1.75vw) 100%,
+                    calc(0% + 1.75vw) 100%
+                );
+            }
+            .segment:nth-child(5) {
+                left: 1.5vw;
+                top: 4vw;
+                transform-origin: 0% 100%;
+                transform: rotate(90deg) scaleY(-1);
+                clip-path: polygon(0% 15%, 10% 0%, 90% 0%, 100% 15%, calc(100% - 1.5vw) 100%, calc(0% + 1.5vw) 100%);
+            }
+            .segment:nth-child(6) {
+                left: -1.5vw;
+                top: 4vw;
+                transform-origin: 100% 100%;
+                transform: rotate(-90deg) scaleY(-1);
+                clip-path: polygon(0% 15%, 10% 0%, 90% 0%, 100% 15%, calc(100% - 1.5vw) 100%, calc(0% + 1.5vw) 100%);
+            }
+            .segment:nth-child(7) {
+                top: 9.75vw;
+                left: 0;
+                transform: scaleY(-1);
+                clip-path: polygon(0% 15%, 10% 0%, 90% 0%, 100% 15%, calc(100% - 2vw) 100%, calc(0% + 2vw) 100%);
+            }
+            .one .segment:nth-child(3),
+            .one .segment:nth-child(6) {
+                background: var(--active-clr);
+                filter: blur(3px);
+            }
+            .zero .segment:nth-child(1),
+            .zero .segment:nth-child(2),
+            .zero .segment:nth-child(3),
+            .zero .segment:nth-child(5),
+            .zero .segment:nth-child(6),
+            .zero .segment:nth-child(7) {
+                background: var(--active-clr);
+                filter: blur(3px);
+            }
+            .two .segment:nth-child(1),
+            .two .segment:nth-child(3),
+            .two .segment:nth-child(4),
+            .two .segment:nth-child(5),
+            .two .segment:nth-child(7) {
+                background: var(--active-clr);
+                filter: blur(3px);
+            }
+            .three .segment:nth-child(1),
+            .three .segment:nth-child(3),
+            .three .segment:nth-child(4),
+            .three .segment:nth-child(6),
+            .three .segment:nth-child(7) {
+                background: var(--active-clr);
+                filter: blur(3px);
+            }
+            .four .segment:nth-child(2),
+            .four .segment:nth-child(3),
+            .four .segment:nth-child(4),
+            .four .segment:nth-child(6) {
+                background: var(--active-clr);
+                filter: blur(3px);
+            }
+            .five .segment:nth-child(1),
+            .five .segment:nth-child(2),
+            .five .segment:nth-child(4),
+            .five .segment:nth-child(6),
+            .five .segment:nth-child(7) {
+                background: var(--active-clr);
+                filter: blur(3px);
+            }
+            .six .segment:nth-child(1),
+            .six .segment:nth-child(2),
+            .six .segment:nth-child(4),
+            .six .segment:nth-child(5),
+            .six .segment:nth-child(6),
+            .six .segment:nth-child(7) {
+                background: var(--active-clr);
+                filter: blur(3px);
+            }
+            .seven .segment:nth-child(1),
+            .seven .segment:nth-child(3),
+            .seven .segment:nth-child(6) {
+                background: var(--active-clr);
+                filter: blur(3px);
+            }
+            .eight .segment:nth-child(1),
+            .eight .segment:nth-child(2),
+            .eight .segment:nth-child(3),
+            .eight .segment:nth-child(4),
+            .eight .segment:nth-child(5),
+            .eight .segment:nth-child(6),
+            .eight .segment:nth-child(7) {
+                background: var(--active-clr);
+                filter: blur(3px);
+            }
+            .nine .segment:nth-child(1),
+            .nine .segment:nth-child(2),
+            .nine .segment:nth-child(3),
+            .nine .segment:nth-child(4),
+            .nine .segment:nth-child(6),
+            .nine .segment:nth-child(7) {
+                background: var(--active-clr);
+                filter: blur(3px);
+            }
+            :root {
+                --fire-width: 100%;
+                --fire-blur: 2;
+                --fire-blur: calc(var(--fire-width) * 0.03);
+                --color-start: rgba(255, 255, 255, 0.25);
+                --color-end: rgba(255, 255, 255, 0.25);
+            }
+            #ice_box {
+                width: var(--fire-width);
+                aspect-ratio: 1 / 1;
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                transform: translate(0%, 0%);
+                clip-path: polygon(0% 75%, 50% 98.5%, 100% 75%, 100% 0%, 0% 0%);
+            }
+            .flame {
+                width: calc(var(--fire-width) * 0.2);
+                height: calc(var(--fire-width) * 0.2);
+                border-radius: 50%;
+                background: var(--color-start);
+                position: absolute;
+                bottom: 0;
+                transform: translateX(-50%);
+                filter: blur(var(--fire-blur));
+                animation: burn 5.5s ease-in forwards;
+            }
+            @keyframes burn {
+                0% {
+                    opacity: 0;
+                }
+                10% {
+                    opacity: 1;
+                }
+                100% {
+                    background: var(--color-end);
+                    bottom: calc(var(--fire-width) * 0.75);
+                    opacity: 0;
+                    transform: translateX(-50%) scale(0.2);
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="ice_box"></div>
+        <div class="cube left">
+            <div class="digit zero">
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+            </div>
+            <div class="digit one">
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+            </div>
+        </div>
+        <div class="cube right">
+            <div class="digit two">
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+            </div>
+            <div class="digit three">
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+            </div>
+        </div>
+        <div class="cube top">
+            <div class="digit four">
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+            </div>
+            <div class="digit four">
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+            </div>
+        </div>
+        <div class="colorBox"></div>
+    </body>
+    <script>
+        const nums = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+        const box = document.querySelector('#ice_box');
+
+        function getTime() {
+            var today = new Date();
+            var hour = today.getHours();
+            if (hour > 12) {
+                hour = hour - 12;
+            }
+            var minute = today.getMinutes();
+            var second = today.getSeconds();
+
+            document.querySelectorAll('.digit')[0].className =
+                'digit ' + nums[hour.toString().padStart(2, '0').split('')[0]];
+            document.querySelectorAll('.digit')[1].className =
+                'digit dots ' + nums[hour.toString().padStart(2, '0').split('')[1]];
+            document.querySelectorAll('.digit')[2].className =
+                'digit ' + nums[minute.toString().padStart(2, '0').split('')[0]];
+            document.querySelectorAll('.digit')[3].className =
+                'digit dots ' + nums[minute.toString().padStart(2, '0').split('')[1]];
+            document.querySelectorAll('.digit')[4].className =
+                'digit ' + nums[second.toString().padStart(2, '0').split('')[0]];
+            document.querySelectorAll('.digit')[5].className =
+                'digit ' + nums[second.toString().padStart(2, '0').split('')[1]];
+        }
+        getTime();
+        setInterval(getTime, 1000);
+        function addColorPicker() {
+            const colors = [
+                'red',
+                'darkorange',
+                'goldenrod',
+                'limegreen',
+                'dodgerblue',
+                'Turquoise',
+                'Purple',
+                'magenta'
+            ];
+            for (var i = 0; i < colors.length; i++) {
+                var s = document.createElement('div');
+                s.className = 'swatch';
+                s.dataset.clr = colors[i];
+                s.style.background = colors[i];
+                s.style.width = '30px';
+                s.style.height = '30px';
+                s.style.margin = '.5vw';
+                s.style.cursor = 'pointer';
+                s.style.borderRadius = '50%';
+                s.style.display = 'inline-block';
+                s.onclick = function () {
+                    document.documentElement.style.setProperty('--active-clr', this.dataset.clr);
+                };
+                document.querySelector('.colorBox').appendChild(s);
+            }
+
+            document.documentElement.style.setProperty(
+                '--active-clr',
+                colors[Math.floor(Math.random() * colors.length)]
+            );
+
+            var w = document.querySelector('.top').getBoundingClientRect();
+            document.querySelector('body').style.width = w.width + 'px';
+            box.style.width = w.width + 'px';
+        }
+        addColorPicker();
+
+        window.addEventListener('resize', function () {
+            var w = document.querySelector('.top').getBoundingClientRect();
+            document.querySelector('body').style.width = w.width + 'px';
+            box.style.width = w.width + 'px';
+        });
+        function addFlame() {
+            var f = document.createElement('div');
+            f.className = 'flame';
+            f.style.left = Math.random() * 100 + '%';
+            f.style.animationDuration = Math.random() < 0.5 ? '10s' : '4.5s';
+            f.onanimationend = function () {
+                this.remove();
+            };
+            box.appendChild(f);
+
+            setTimeout(addFlame, 100);
+        }
+        addFlame();
+    </script>
+</html>
+更多效果预览和完整代码一键复制 <!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>3D冰块数字时钟</title>
+        <style>
+            :root {
+                --active-clr: red;
+                --passive-clr: rgba(255, 255, 255, 0.1);
+            }
+
+            html {
+                min-height: 100vh;
+                display: grid;
+                place-items: center;
+                background: linear-gradient(to top, #222 50%, #555 50%);
+                perspective: 200px;
+            }
+
+            body {
+                margin: 0;
+                width: 100%;
+                max-width: 608px;
+                aspect-ratio: 1 / 1;
+                text-align: center;
+                perspective: 200px;
+                position: relative;
+            }
+
+            .colorBox {
+                width: 100%;
+                position: absolute;
+                bottom: calc((1vw + 30px) * -1);
+                left: 50%;
+                transform: translate(-50%, 75%);
+            }
+
+            .cube {
+                position: absolute;
+                padding: 1rem;
+                box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.25);
+                background: rgba(255, 255, 255, 0.25);
+                backdrop-filter: blur(4px);
+            }
+
+            .cube.left {
+                transform: translateY(75%) skewY(25deg);
+                border-radius: 0 0 0 5px;
+            }
+
+            .cube.right {
+                transform: translate(100%, 75%) skewY(-25deg);
+                border-radius: 0 0 5px 0;
+            }
+
+            .cube.top {
+                transform: translate(50%, 1.75%) rotateZ(-65deg) skewY(40deg) scaleX(0.85) scaleY(1.1);
+                border-radius: 0 5px 0 0;
+            }
+
+            .digit {
+                width: 5vw;
+                height: 12vw;
+                position: relative;
+                display: inline-block;
+                margin: 1vw;
+            }
+
+            .segment {
+                width: 5vw;
+                height: 2vw;
+                background: var(--passive-clr);
+                position: absolute;
+                transition: 0.5s;
+            }
+
+            .segment:nth-child(1) {
+                top: 0;
+                left: 0;
+                clip-path: polygon(0% 15%, 10% 0%, 90% 0%, 100% 15%, calc(100% - 2vw) 100%, calc(0% + 2vw) 100%);
+            }
+
+            .segment:nth-child(2) {
+                left: 1.5vw;
+                top: -1.25vw;
+                transform-origin: 0% 100%;
+                transform: rotate(90deg) scaleY(-1);
+                clip-path: polygon(0% 15%, 10% 0%, 90% 0%, 100% 15%, calc(100% - 1.5vw) 100%, calc(0% + 1.5vw) 100%);
+            }
+
+            .segment:nth-child(3) {
+                left: -1.5vw;
+                top: -1.25vw;
+                transform-origin: 100% 100%;
+                transform: rotate(-90deg) scaleY(-1);
+                clip-path: polygon(0% 15%, 10% 0%, 90% 0%, 100% 15%, calc(100% - 1.5vw) 100%, calc(0% + 1.5vw) 100%);
+            }
+
+            .segment:nth-child(4) {
+                top: 4.85vw;
+                left: 0;
+                clip-path: polygon(
+                    10% 50%,
+                    calc(0% + 1.75vw) 0%,
+                    calc(100% - 1.75vw) 0%,
+                    90% 50%,
+                    calc(100% - 1.75vw) 100%,
+                    calc(0% + 1.75vw) 100%
+                );
+            }
+
+            .segment:nth-child(5) {
+                left: 1.5vw;
+                top: 4vw;
+                transform-origin: 0% 100%;
+                transform: rotate(90deg) scaleY(-1);
+                clip-path: polygon(0% 15%, 10% 0%, 90% 0%, 100% 15%, calc(100% - 1.5vw) 100%, calc(0% + 1.5vw) 100%);
+            }
+
+            .segment:nth-child(6) {
+                left: -1.5vw;
+                top: 4vw;
+                transform-origin: 100% 100%;
+                transform: rotate(-90deg) scaleY(-1);
+                clip-path: polygon(0% 15%, 10% 0%, 90% 0%, 100% 15%, calc(100% - 1.5vw) 100%, calc(0% + 1.5vw) 100%);
+            }
+
+            .segment:nth-child(7) {
+                top: 9.75vw;
+                left: 0;
+                transform: scaleY(-1);
+                clip-path: polygon(0% 15%, 10% 0%, 90% 0%, 100% 15%, calc(100% - 2vw) 100%, calc(0% + 2vw) 100%);
+            }
+
+            .one .segment:nth-child(3),
+            .one .segment:nth-child(6) {
+                background: var(--active-clr);
+                filter: blur(3px);
+            }
+
+            .zero .segment:nth-child(1),
+            .zero .segment:nth-child(2),
+            .zero .segment:nth-child(3),
+            .zero .segment:nth-child(5),
+            .zero .segment:nth-child(6),
+            .zero .segment:nth-child(7) {
+                background: var(--active-clr);
+                filter: blur(3px);
+            }
+
+            .two .segment:nth-child(1),
+            .two .segment:nth-child(3),
+            .two .segment:nth-child(4),
+            .two .segment:nth-child(5),
+            .two .segment:nth-child(7) {
+                background: var(--active-clr);
+                filter: blur(3px);
+            }
+
+            .three .segment:nth-child(1),
+            .three .segment:nth-child(3),
+            .three .segment:nth-child(4),
+            .three .segment:nth-child(6),
+            .three .segment:nth-child(7) {
+                background: var(--active-clr);
+                filter: blur(3px);
+            }
+
+            .four .segment:nth-child(2),
+            .four .segment:nth-child(3),
+            .four .segment:nth-child(4),
+            .four .segment:nth-child(6) {
+                background: var(--active-clr);
+                filter: blur(3px);
+            }
+
+            .five .segment:nth-child(1),
+            .five .segment:nth-child(2),
+            .five .segment:nth-child(4),
+            .five .segment:nth-child(6),
+            .five .segment:nth-child(7) {
+                background: var(--active-clr);
+                filter: blur(3px);
+            }
+
+            .six .segment:nth-child(1),
+            .six .segment:nth-child(2),
+            .six .segment:nth-child(4),
+            .six .segment:nth-child(5),
+            .six .segment:nth-child(6),
+            .six .segment:nth-child(7) {
+                background: var(--active-clr);
+                filter: blur(3px);
+            }
+
+            .seven .segment:nth-child(1),
+            .seven .segment:nth-child(3),
+            .seven .segment:nth-child(6) {
+                background: var(--active-clr);
+                filter: blur(3px);
+            }
+
+            .eight .segment:nth-child(1),
+            .eight .segment:nth-child(2),
+            .eight .segment:nth-child(3),
+            .eight .segment:nth-child(4),
+            .eight .segment:nth-child(5),
+            .eight .segment:nth-child(6),
+            .eight .segment:nth-child(7) {
+                background: var(--active-clr);
+                filter: blur(3px);
+            }
+
+            .nine .segment:nth-child(1),
+            .nine .segment:nth-child(2),
+            .nine .segment:nth-child(3),
+            .nine .segment:nth-child(4),
+            .nine .segment:nth-child(6),
+            .nine .segment:nth-child(7) {
+                background: var(--active-clr);
+                filter: blur(3px);
+            }
+
+            :root {
+                --fire-width: 100%;
+                --fire-blur: 2;
+                --fire-blur: calc(var(--fire-width) * 0.03);
+                --color-start: rgba(255, 255, 255, 0.25);
+                --color-end: rgba(255, 255, 255, 0.25);
+            }
+
+            #ice_box {
+                width: var(--fire-width);
+                aspect-ratio: 1 / 1;
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                transform: translate(0%, 0%);
+                clip-path: polygon(0% 75%, 50% 98.5%, 100% 75%, 100% 0%, 0% 0%);
+            }
+
+            .flame {
+                width: calc(var(--fire-width) * 0.2);
+                height: calc(var(--fire-width) * 0.2);
+                border-radius: 50%;
+                background: var(--color-start);
+                position: absolute;
+                bottom: 0;
+                transform: translateX(-50%);
+                filter: blur(var(--fire-blur));
+                animation: burn 5.5s ease-in forwards;
+            }
+
+            @keyframes burn {
+                0% {
+                    opacity: 0;
+                }
+                10% {
+                    opacity: 1;
+                }
+                100% {
+                    background: var(--color-end);
+                    bottom: calc(var(--fire-width) * 0.75);
+                    opacity: 0;
+                    transform: translateX(-50%) scale(0.2);
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="ice_box"></div>
+        <div class="cube left">
+            <div class="digit zero">
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+            </div>
+            <div class="digit one">
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+            </div>
+        </div>
+        <div class="cube right">
+            <div class="digit two">
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+            </div>
+            <div class="digit three">
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+            </div>
+        </div>
+        <div class="cube top">
+            <div class="digit four">
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+            </div>
+            <div class="digit four">
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+                <div class="segment"></div>
+            </div>
+        </div>
+        <div class="colorBox"></div>
+    </body>
+    <script>
+        const nums = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+        const box = document.querySelector('#ice_box');
+
+        function getTime() {
+            var today = new Date();
+            var hour = today.getHours();
+            if (hour > 12) {
+                hour = hour - 12;
+            }
+            var minute = today.getMinutes();
+            var second = today.getSeconds();
+
+            document.querySelectorAll('.digit')[0].className =
+                'digit ' + nums[hour.toString().padStart(2, '0').split('')[0]];
+            document.querySelectorAll('.digit')[1].className =
+                'digit dots ' + nums[hour.toString().padStart(2, '0').split('')[1]];
+            document.querySelectorAll('.digit')[2].className =
+                'digit ' + nums[minute.toString().padStart(2, '0').split('')[0]];
+            document.querySelectorAll('.digit')[3].className =
+                'digit dots ' + nums[minute.toString().padStart(2, '0').split('')[1]];
+            document.querySelectorAll('.digit')[4].className =
+                'digit ' + nums[second.toString().padStart(2, '0').split('')[0]];
+            document.querySelectorAll('.digit')[5].className =
+                'digit ' + nums[second.toString().padStart(2, '0').split('')[1]];
+        }
+
+        getTime();
+        setInterval(getTime, 1000);
+
+        function addColorPicker() {
+            const colors = [
+                'red',
+                'darkorange',
+                'goldenrod',
+                'limegreen',
+                'dodgerblue',
+                'Turquoise',
+                'Purple',
+                'magenta'
+            ];
+            for (var i = 0; i < colors.length; i++) {
+                var s = document.createElement('div');
+                s.className = 'swatch';
+                s.dataset.clr = colors[i];
+                s.style.background = colors[i];
+                s.style.width = '30px';
+                s.style.height = '30px';
+                s.style.margin = '.5vw';
+                s.style.cursor = 'pointer';
+                s.style.borderRadius = '50%';
+                s.style.display = 'inline-block';
+                s.onclick = function () {
+                    document.documentElement.style.setProperty('--active-clr', this.dataset.clr);
+                };
+                document.querySelector('.colorBox').appendChild(s);
+            }
+
+            document.documentElement.style.setProperty(
+                '--active-clr',
+                colors[Math.floor(Math.random() * colors.length)]
+            );
+
+            var w = document.querySelector('.top').getBoundingClientRect();
+            document.querySelector('body').style.width = w.width + 'px';
+            box.style.width = w.width + 'px';
+        }
+
+        addColorPicker();
+
+        window.addEventListener('resize', function () {
+            var w = document.querySelector('.top').getBoundingClientRect();
+            document.querySelector('body').style.width = w.width + 'px';
+            box.style.width = w.width + 'px';
+        });
+
+        function addFlame() {
+            var f = document.createElement('div');
+            f.className = 'flame';
+            f.style.left = Math.random() * 100 + '%';
+            f.style.animationDuration = Math.random() < 0.5 ? '10s' : '4.5s';
+            f.onanimationend = function () {
+                this.remove();
+            };
+            box.appendChild(f);
+
+            setTimeout(addFlame, 100);
+        }
+
+        addFlame();
+    </script>
+</html>

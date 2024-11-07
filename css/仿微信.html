@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="referrer" content="no-referrer" />
+        <meta
+            name="viewport"
+            id="WebViewport"
+            content="width=100%,initial-scale=1,target-densitydpi=device-dpi,minimum-scale=0.5,maximum-scale=1,user-scalable=1"
+        />
+        <!-- 此源码由 http://www.psdhtml.cn/ 大设计师论坛独家编写，禁止转售 -->
+        <title>这是一个首页</title>
+        <style type="text/css">
+            * {
+                margin: 0;
+                padding: 0;
+            } /* 通配符 删除浏览器默认值 */
+            ul {
+                list-style: none; /* 取消项目符号样式 */
+            }
+            body {
+                overflow-x: hidden;
+                background-color: rgba(250, 250, 250, 1);
+                font-family: 'Helvetica Neue', 'Helvetica', 'Microsoft Yahei', sans-serif; /* 字体集 */
+            }
+            @media (min-width: 601px) {
+                /* >=601的设备*/
+
+                .top_info {
+                    width: 100%;
+                    height: 600px;
+                    position: relative;
+                }
+
+                .top_info:after {
+                    background-color: #2aae67;
+                    content: '';
+                    width: 160%;
+                    height: 650px;
+                    position: absolute;
+                    left: -30%;
+                    top: 0;
+                    z-index: -1;
+                    border-radius: 0 0 50% 50%;
+                }
+                .top_info .top-text {
+                    height: 130px;
+                    width: 620px;
+                    margin-top: 40px;
+                    margin-right: auto;
+                    margin-left: auto;
+                    font-size: 0.87em;
+                    border-top-width: 1px;
+                    border-top-style: solid;
+                    border-top-color: #f2f2f2;
+                    line-height: 32px;
+                    color: #f2f2f2;
+                    padding-top: 18px;
+                    text-align: justify;
+                }
+                .top_info .round_div_all {
+                    height: 120px;
+                    width: 700px;
+                    margin-right: auto;
+                    margin-left: auto;
+                    padding-top: 5px;
+                    display: -webkit-flex; /* 定义内部为弹性布局 */
+                    display: flex; /* 定义内部为弹性布局 */
+                    flex-wrap: wrap; /* 让弹性盒元素在需要的时候拆列 */
+                    justify-content: space-around; /* （横轴）方向上均匀排列每个元素 */
+                }
+                .mian01 {
+                    width: 850px;
+                    margin-top: 40px;
+                    margin-right: auto;
+                    margin-left: auto;
+                    padding-top: 40px;
+                    padding-bottom: 40px;
+                    overflow: hidden; /* 防止塌陷 */
+                    display: -webkit-flex; /* 定义内部为弹性布局 */
+                    display: flex; /* 定义内部为弹性布局 */
+                    flex-wrap: wrap; /* 让弹性盒元素在需要的时候拆列 */
+                    justify-content: space-around; /* （横轴）方向上均匀排列每个元素 */
+                }
+                .square_div {
+                    float: left;
+                    height: 160px;
+                    width: 180px;
+                    margin-top: 30px;
+                    border-radius: 6px;
+                    background-color: #ffffff;
+                    box-shadow: 0px 0px 5px 5px rgba(152, 152, 152, 0.07); /* 设置一个阴影 颜色 透明度 */
+                    cursor: pointer; /* 鼠标在此处的效果为“小手”样式 */
+                    margin-right: auto;
+                    margin-left: auto;
+                }
+            }
+            @media (max-width: 600px) {
+                /*响应式 <=600的设备使用如下css样式表 */
+
+                .top_info {
+                    width: 100%;
+                    height: 750px;
+                    background-color: #2aae67;
+                    border-bottom-left-radius: 60% 15%;
+                    border-bottom-right-radius: 60% 15%;
+                }
+                .top_info .top-text {
+                    height: 130px;
+                    width: 80%;
+                    margin-top: 40px;
+                    margin-right: auto;
+                    margin-left: auto;
+                    font-size: 0.87em;
+                    border-top-width: 1px;
+                    border-top-style: solid;
+                    border-top-color: #f2f2f2;
+                    line-height: 32px;
+                    color: #f2f2f2;
+                    padding-top: 18px;
+                    text-align: justify;
+                }
+                .top_info .round_div_all {
+                    width: 80%;
+                    margin-right: auto;
+                    margin-left: auto;
+                    padding-top: 40px;
+                    display: -webkit-flex; /* 定义内部为弹性布局 */
+                    display: flex; /* 定义内部为弹性布局 */
+                    flex-wrap: wrap; /* 让弹性盒元素在需要的时候拆列 */
+                    justify-content: space-around; /* （横轴）方向上均匀排列每个元素 */
+                }
+                .mian01 {
+                    width: 90%;
+                    margin-right: auto;
+                    margin-left: auto;
+                    text-align: center;
+                    padding-top: 40px;
+                    padding-bottom: 40px;
+                    overflow: hidden; /* 防止塌陷 */
+                    display: -webkit-flex; /* 定义内部为弹性布局 */
+                    display: flex; /* 定义内部为弹性布局 */
+                    flex-wrap: wrap; /* 让弹性盒元素在需要的时候拆列 */
+                    justify-content: space-around; /* （横轴）方向上均匀排列每个元素 */
+                }
+                .square_div {
+                    float: left;
+                    height: 142px;
+                    width: 160px;
+                    margin-top: 30px;
+                    border-radius: 6px;
+                    background-color: #ffffff;
+                    box-shadow: 0px 0px 5px 5px rgba(152, 152, 152, 0.07); /* 设置一个阴影 颜色 透明度 */
+                    cursor: pointer; /* 鼠标在此处的效果为“小手”样式 */
+                    margin-right: auto;
+                    margin-left: auto;
+                }
+            }
+
+            .top_info .login {
+                height: 22px;
+                width: 45px;
+                margin-top: 1%;
+                float: left;
+                margin-left: 91%;
+                font-size: 0.9em;
+                letter-spacing: 3px;
+            }
+            .top_info .logo {
+                height: 64px;
+                width: 200px;
+                margin-right: auto;
+                margin-left: auto;
+                padding-top: 120px;
+            }
+            .top_info .logo img:hover {
+                opacity: 0.8;
+            }
+            .top_info .round_div_all .round_div {
+                float: left;
+                height: 110px;
+                width: 110px;
+                margin-top: 30px;
+                border-radius: 50%;
+                background-color: #39b472;
+                cursor: pointer; /* 鼠标在此处的效果为“小手”样式 */
+                margin-left: 25px;
+                margin-right: 25px;
+            }
+            .top_info .round_div_all .round_div:hover {
+                background-color: #4aba7e;
+                transition-duration: 0.3s; /* 缩放的过渡时间 */
+            }
+            .top_info .round_div_all .round_div .r-s01 {
+                height: 40px;
+                width: 40px;
+                margin-top: 20px;
+                margin-right: auto;
+                margin-left: auto;
+            }
+            .top_info .round_div_all .round_div .r-s02 {
+                height: 25px;
+                width: 90px;
+                margin-top: 10px;
+                margin-right: auto;
+                margin-left: auto;
+                font-size: 0.8em;
+                color: #f2f2f2;
+                text-align: center;
+            }
+
+            .square_div:hover {
+                -webkit-transform: scale(1.11, 1.11);
+                -moz-transform: scale(1.11, 1.11);
+                -transform: scale(1.11, 1.11);
+                transition-duration: 0.5s; /* 缩放的过渡时间 */
+            }
+            .square_div .s-s01 {
+                height: 43px;
+                width: 43px;
+                margin-top: 38px;
+                margin-right: auto;
+                margin-left: auto;
+            }
+            .square_div .s-s02 {
+                height: 25px;
+                width: 120px;
+                margin-top: 18px;
+                margin-right: auto;
+                margin-left: auto;
+                font-size: 0.9em;
+                color: #1a1a1a;
+                text-align: center;
+            }
+            .down {
+                background-color: #ffffff;
+                text-align: center;
+                height: 50px;
+                width: 100%;
+                padding-top: 40px;
+                padding-bottom: 40px;
+                margin-top: 40px;
+            }
+            .f82 {
+                font-size: 0.82px;
+                color: #4c4c4c;
+                line-height: 28px;
+                letter-spacing: 1px;
+            }
+            .f75 {
+                font-size: 0.75px;
+                color: #a0a2a0;
+                line-height: 30px;
+                letter-spacing: 1px;
+            }
+
+            a:link {
+                color: #ffffff;
+                text-decoration: none;
+            }
+            a:visited {
+                text-decoration: none;
+                color: #ffffff;
+            }
+            a:hover {
+                text-decoration: none;
+                color: #ececec;
+            }
+            a:active {
+                text-decoration: none;
+            }
+            .banquan {
+                height: 36px;
+                width: 1000px;
+                margin-right: auto;
+                margin-left: auto;
+                border-top-width: 1px;
+                border-top-style: solid;
+                border-top-color: #f2f2f2;
+                background-image: url(http://cdn.psdhtml.cn/wx_images/wx_lxidw7.svg);
+                background-color: #fff;
+            }
+        </style>
+    </head>
+
+    <body>
+        <!-- 此源码由 http://www.psdhtml.cn/ 大设计师论坛独家编写，禁止转售 -->
+        <div class="top_info">
+            <div class="login"><a href="#">登录</a></div>
+            <div class="logo">
+                <a href="http://www.psdhtml.cn/index.php?c=thread&fid=18?wx01sy" target="_blank"
+                    ><img src="http://cdn.psdhtml.cn/wx_images/logo.png" width="200" height="64"
+                /></a>
+            </div>
+            <div class="top-text">
+                我们支持跨通信运营商、跨操作系统平台通过网络快速发送免费（需消耗少量网络流量）语音短信、视频、图片和文字，同时，也可以使用通过共享流媒体内容的资料和基于位置的社交插件“摇一摇”、“圈子”、”公众平台“、”语音记事本“等服务插件。
+            </div>
+            <div class="round_div_all">
+                <div class="round_div">
+                    <div class="r-s01">
+                        <a href="http://www.psdhtml.cn/index.php?c=thread&fid=18?wx01sy" target="_blank"
+                            ><img src="http://cdn.psdhtml.cn/wx_images/icon01.png" width="40" height="40"
+                        /></a>
+                    </div>
+                    <div class="r-s02">Android</div>
+                </div>
+
+                <div class="round_div">
+                    <div class="r-s01">
+                        <a href="http://www.psdhtml.cn/index.php?c=thread&fid=18?wx01sy" target="_blank"
+                            ><img src="http://cdn.psdhtml.cn/wx_images/icon02.png" width="40" height="40"
+                        /></a>
+                    </div>
+                    <div class="r-s02">IOS</div>
+                </div>
+
+                <div class="round_div">
+                    <div class="r-s01">
+                        <a href="http://www.psdhtml.cn/index.php?c=thread&fid=18?wx01sy" target="_blank"
+                            ><img src="http://cdn.psdhtml.cn/wx_images/icon03.png" width="40" height="40"
+                        /></a>
+                    </div>
+                    <div class="r-s02">Windows</div>
+                </div>
+
+                <div class="round_div">
+                    <div class="r-s01">
+                        <a href="http://www.psdhtml.cn/index.php?c=thread&fid=18?wx01sy" target="_blank"
+                            ><img src="http://cdn.psdhtml.cn/wx_images/icon04.png" width="40" height="40"
+                        /></a>
+                    </div>
+                    <div class="r-s02">Harmony OS</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mian01">
+            <div class="square_div">
+                <div class="s-s01">
+                    <img src="http://cdn.psdhtml.cn/wx_images/icon_svg_01.svg" width="43" height="43" />
+                </div>
+                <div class="s-s02">We支付</div>
+            </div>
+
+            <div class="square_div">
+                <div class="s-s01">
+                    <img src="http://cdn.psdhtml.cn/wx_images/icon_svg_02.svg" width="43" height="43" />
+                </div>
+                <div class="s-s02">公Z号</div>
+            </div>
+
+            <div class="square_div">
+                <div class="s-s01">
+                    <img src="http://cdn.psdhtml.cn/wx_images/icon_svg_03.svg" width="43" height="43" />
+                </div>
+                <div class="s-s02">小程序</div>
+            </div>
+
+            <div class="square_div">
+                <div class="s-s01">
+                    <img src="http://cdn.psdhtml.cn/wx_images/icon_svg_04.svg" width="43" height="43" />
+                </div>
+                <div class="s-s02">视频号助手</div>
+            </div>
+
+            <div class="square_div">
+                <div class="s-s01">
+                    <img src="http://cdn.psdhtml.cn/wx_images/icon_svg_05.svg" width="43" height="43" />
+                </div>
+                <div class="s-s02">小游戏</div>
+            </div>
+
+            <div class="square_div">
+                <div class="s-s01">
+                    <img src="http://cdn.psdhtml.cn/wx_images/icon_svg_06.svg" width="43" height="43" />
+                </div>
+                <div class="s-s02">小商店</div>
+            </div>
+
+            <div class="square_div">
+                <div class="s-s01">
+                    <img src="http://cdn.psdhtml.cn/wx_images/icon_svg_07.svg" width="43" height="43" />
+                </div>
+                <div class="s-s02">表情开放平台</div>
+            </div>
+
+            <div class="square_div">
+                <div class="s-s01">
+                    <img src="http://cdn.psdhtml.cn/wx_images/icon_svg_08.svg" width="43" height="43" />
+                </div>
+                <div class="s-s02">搜一搜开放平台</div>
+            </div>
+
+            <div class="square_div">
+                <div class="s-s01">
+                    <img src="http://cdn.psdhtml.cn/wx_images/icon_svg_09.svg" width="43" height="43" />
+                </div>
+                <div class="s-s02">红包封面</div>
+            </div>
+
+            <div class="square_div">
+                <div class="s-s01">
+                    <img src="http://cdn.psdhtml.cn/wx_images/icon_svg_10.svg" width="43" height="43" />
+                </div>
+                <div class="s-s02">对话开放</div>
+            </div>
+
+            <div class="square_div">
+                <div class="s-s01">
+                    <img src="http://cdn.psdhtml.cn/wx_images/icon_svg_11.svg" width="43" height="43" />
+                </div>
+                <div class="s-s02">服务平台</div>
+            </div>
+
+            <div class="square_div">
+                <div class="s-s01">
+                    <img src="http://cdn.psdhtml.cn/wx_images/icon_svg_12.svg" width="43" height="43" />
+                </div>
+                <div class="s-s02">在线学堂</div>
+            </div>
+        </div>
+
+        <footer class="down">
+            <span class="f82">We安全 | 服务条款 | 使用规范 | 客服中心 | 隐私保护指引</span><br />
+            <span class="f75">Copyright © 1998-2022 All Rights Reserved.</span>
+        </footer>
+        <div class="banquan">
+            <a href="http://www.psdhtml.cn/index.php?c=thread&fid=18?wx01sy" target="_blank"
+                ><img src="http://cdn.psdhtml.cn/wx_images/wx_lxidw7.svg" width="1000" height="36"
+            /></a>
+        </div>
+    </body>
+    <!-- 此源码由 http://www.psdhtml.cn/ 大设计师论坛独家编写，禁止转售 -->
+</html>
